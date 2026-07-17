@@ -21,49 +21,68 @@ export default function HiringForm() {
   const [data, setData] = useState({ company: '', contact: '', email: '', phone: '', role: '', experience: '', skills: '', urgency: '', notes: '' })
   const [ok, setOk] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [err, setErr] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setErr('');
     
-    const submitUrl = import.meta.env.VITE_FORMSPREE_URL || import.meta.env.VITE_GOOGLE_SHEET_URL || "";
-    
-    if (submitUrl) {
-      try {
-        const isFormspree = submitUrl.includes("formspree.io");
-        
-        const response = await fetch(submitUrl, {
-          method: 'POST',
-          mode: isFormspree ? 'cors' : 'no-cors',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...data,
-            timestamp: new Date().toISOString()
-          })
-        });
-        
-        if (isFormspree) {
-          if (response.ok) {
-            setOk(true);
-          } else {
-            const errData = await response.json();
-            console.error("Formspree error response:", errData);
-            alert("Submission failed: " + (errData.error || "Please check your Formspree URL configuration."));
-          }
-        } else {
-          // Google Sheets fallback success (no-cors ignores status)
-          setOk(true);
-        }
-      } catch (error) {
-        console.error("Submission failed:", error);
-        alert("A network error occurred. Please check your internet connection.");
+    try {
+      const response = await fetch('/api/hiring', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (response.ok) {
+        setOk(true);
+      } else {
+        const body = await response.json();
+        setErr(body.error || 'Failed to submit requirement');
       }
-    } else {
-      // Local demo fallback
-      setOk(true);
+    } catch (error: any) {
+      console.error("Submission to MongoDB failed, trying fallback:", error);
+      const submitUrl = import.meta.env.VITE_FORMSPREE_URL || import.meta.env.VITE_GOOGLE_SHEET_URL || "";
+      
+      if (submitUrl) {
+        try {
+          const isFormspree = submitUrl.includes("formspree.io");
+          
+          const response = await fetch(submitUrl, {
+            method: 'POST',
+            mode: isFormspree ? 'cors' : 'no-cors',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              ...data,
+              timestamp: new Date().toISOString()
+            })
+          });
+          
+          if (isFormspree) {
+            if (response.ok) {
+              setOk(true);
+            } else {
+              const errData = await response.json();
+              console.error("Formspree error response:", errData);
+              setErr("Submission failed: " + (errData.error || "Please check configuration."));
+            }
+          } else {
+            // Google Sheets fallback success (no-cors ignores status)
+            setOk(true);
+          }
+        } catch (fbError: any) {
+          console.error("Fallback submission failed:", fbError);
+          setErr("A network error occurred. Please check your internet connection.");
+        }
+      } else {
+        setErr("A network error occurred. Please check your internet connection.");
+      }
     }
     setSubmitting(false);
   }
@@ -157,6 +176,7 @@ export default function HiringForm() {
         onMouseLeave={e => { if(!submitting) { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 18px rgba(37,99,235,.38)' } }}>
           {submitting ? 'Submitting Requirement...' : 'Submit Requirement →'}
         </button>
+        {err && <p style={{ color: '#EF4444', fontSize: '13px', marginTop: '10px', textAlign: 'center', fontWeight: 600 }}>{err}</p>}
         <p style={{ textAlign: 'center', fontSize: '12px', color: '#94A3B8', marginTop: '10px' }}>No upfront fees · Response within 2 business hours</p>
       </form>
     </div>

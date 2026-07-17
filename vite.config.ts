@@ -1,7 +1,9 @@
-import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type HtmlTagDescriptor, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
+import dns from 'node:dns'
+import { MongoClient } from 'mongodb'
 
 import siteConfiguration from './.figma/make/site.json'
 
@@ -23,6 +25,7 @@ export default defineConfig(({ mode }) => {
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),
       figmaMakeKitPlugin({ storiesGlob: '/src/**/*.stories.{ts,tsx,js,jsx}' }),
+      figmaMongoDbPlugin(),
     ],
     resolve: {
       alias: {
@@ -352,5 +355,117 @@ function figmaMakeKitPlugin(options: { storiesGlob: string | string[] }): Plugin
         }
       })
     },
+  }
+}
+
+/** Custom plugin to handle MongoDB connection and API routes. */
+function figmaMongoDbPlugin(): Plugin {
+  let client: MongoClient | null = null
+  let dbPromise: Promise<any> | null = null
+
+  async function getDb(uri: string) {
+    if (!client) {
+      try {
+        dns.setServers(['8.8.8.8', '1.1.1.1'])
+      } catch (dnsErr) {
+        console.warn('Failed to set custom DNS servers:', dnsErr)
+      }
+      client = new MongoClient(uri)
+      dbPromise = client.connect().then(() => client!.db())
+    }
+    return dbPromise
+  }
+
+  return {
+    name: 'figma-mongodb-api',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        if (!req.url) return next()
+        const url = new URL(req.url, 'http://localhost')
+        
+        if (url.pathname === '/api/candidates' && req.method === 'POST') {
+          try {
+            const env = loadEnv(server.config.mode, server.config.root, '')
+            const uri = env.MONGODB_URI
+            if (!uri) {
+              res.statusCode = 500
+              res.setHeader('Content-Type', 'application/json')
+              res.end(JSON.stringify({ error: 'MONGODB_URI env variable not configured' }))
+              return
+            }
+
+            // Parse request body
+            let body = ''
+            req.on('data', chunk => { body += chunk })
+            req.on('end', async () => {
+              try {
+                const data = JSON.parse(body)
+                const db = await getDb(uri)
+                const candidates = db.collection('candidates')
+                const result = await candidates.insertOne({
+                  ...data,
+                  createdAt: new Date()
+                })
+                res.statusCode = 201
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ success: true, id: result.insertedId }))
+              } catch (err: any) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ error: 'Invalid JSON body or db error', details: err.message }))
+              }
+            })
+          } catch (err: any) {
+            res.statusCode = 500
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ error: 'Server error', details: err.message }))
+          }
+          return
+        }
+
+        if (url.pathname === '/api/hiring' && req.method === 'POST') {
+          try {
+            const env = loadEnv(server.config.mode, server.config.root, '')
+            const uri = env.MONGODB_URI
+            if (!uri) {
+              res.statusCode = 500
+              res.setHeader('Content-Type', 'application/json')
+              res.end(JSON.stringify({ error: 'MONGODB_URI env variable not configured' }))
+              return
+            }
+
+            // Parse request body
+            let body = ''
+            req.on('data', chunk => { body += chunk })
+            req.on('end', async () => {
+              try {
+                const data = JSON.parse(body)
+                const db = await getDb(uri)
+                const hiring = db.collection('hiring_requirements')
+                const result = await hiring.insertOne({
+                  ...data,
+                  createdAt: new Date()
+                })
+                res.statusCode = 201
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ success: true, id: result.insertedId }))
+              } catch (err: any) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ error: 'Invalid JSON body or db error', details: err.message }))
+              }
+            })
+          } catch (err: any) {
+            res.statusCode = 500
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ error: 'Server error', details: err.message }))
+          }
+          return
+        }
+
+        next()
+      })
+    }
   }
 }

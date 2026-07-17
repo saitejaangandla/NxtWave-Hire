@@ -9,6 +9,8 @@ const IS: React.CSSProperties = {
 export default function CandidateForm() {
   const [data, setData] = useState({ name: '', email: '', phone: '', exp: '', company: '', skills: '', linkedin: '' })
   const [ok, setOk] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [err, setErr] = useState('')
 
   const foc = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
     e.target.style.borderColor = '#06B6D4'; e.target.style.background = '#fff'; e.target.style.boxShadow = '0 0 0 3px rgba(6,182,212,.1)'
@@ -41,7 +43,28 @@ export default function CandidateForm() {
       </div>
       <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '24px' }}>1–10 years experience? Join our exclusive verified talent pool.</p>
 
-      <form onSubmit={e => { e.preventDefault(); setOk(true) }}>
+      <form onSubmit={async e => {
+        e.preventDefault()
+        setSubmitting(true)
+        setErr('')
+        try {
+          const res = await fetch('/api/candidates', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          })
+          if (res.ok) {
+            setOk(true)
+          } else {
+            const body = await res.json()
+            setErr(body.error || 'Something went wrong')
+          }
+        } catch (e: any) {
+          setErr(e.message || 'Failed to submit profile')
+        } finally {
+          setSubmitting(false)
+        }
+      }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {([
             ['name', 'Full Name', 'Arjun Sharma', 'text', true],
@@ -87,16 +110,17 @@ export default function CandidateForm() {
           </div>
         </div>
 
-        <button type="submit" style={{
+        <button type="submit" disabled={submitting} style={{
           width: '100%', marginTop: '18px', padding: '14px', borderRadius: '12px',
-          background: 'linear-gradient(135deg,#06B6D4,#0891B2)',
-          color: '#fff', fontWeight: 700, fontSize: '15px', border: 'none', cursor: 'pointer',
-          boxShadow: '0 4px 18px rgba(6,182,212,.38)', transition: 'all .22s', fontFamily: 'Inter,sans-serif',
+          background: submitting ? '#94A3B8' : 'linear-gradient(135deg,#06B6D4,#0891B2)',
+          color: '#fff', fontWeight: 700, fontSize: '15px', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
+          boxShadow: submitting ? 'none' : '0 4px 18px rgba(6,182,212,.38)', transition: 'all .22s', fontFamily: 'Inter,sans-serif',
         }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(6,182,212,.48)' }}
-        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 18px rgba(6,182,212,.38)' }}>
-          Join Talent Network →
+        onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(6,182,212,.48)' } }}
+        onMouseLeave={e => { if (!submitting) { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 18px rgba(6,182,212,.38)' } }}>
+          {submitting ? 'Joining Talent Network...' : 'Join Talent Network →'}
         </button>
+        {err && <p style={{ color: '#EF4444', fontSize: '13px', marginTop: '10px', textAlign: 'center', fontWeight: 600 }}>{err}</p>}
         <p style={{ textAlign: 'center', fontSize: '12px', color: '#94A3B8', marginTop: '10px' }}>Free · Confidential · No spam</p>
       </form>
     </div>
