@@ -57,10 +57,32 @@ export default function CandidateForm() {
             setOk(true)
           } else {
             const body = await res.json()
-            setErr(body.error || 'Something went wrong')
+            throw new Error(body.error || 'API endpoint submission error')
           }
         } catch (e: any) {
-          setErr(e.message || 'Failed to submit profile')
+          console.error('API submission failed, trying direct Google Sheet/Formspree fallback:', e)
+          const submitUrl = import.meta.env.VITE_GOOGLE_SHEET_URL || import.meta.env.VITE_FORMSPREE_URL || ''
+          if (submitUrl) {
+            try {
+              const isFormspree = submitUrl.includes('formspree.io')
+              const res = await fetch(submitUrl, {
+                method: 'POST',
+                mode: isFormspree ? 'cors' : 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...data, formType: 'candidate', timestamp: new Date().toISOString() })
+              })
+              if (isFormspree) {
+                if (res.ok) setOk(true)
+                else setErr('Submission failed')
+              } else {
+                setOk(true)
+              }
+            } catch (fbErr: any) {
+              setErr(fbErr.message || 'Failed to submit profile')
+            }
+          } else {
+            setErr(e.message || 'Failed to submit profile. Please check Google Sheets configuration.')
+          }
         } finally {
           setSubmitting(false)
         }

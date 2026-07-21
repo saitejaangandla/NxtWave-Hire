@@ -19,14 +19,45 @@ function Field({ label, required, children }: { label: string; required?: boolea
 
 export default function HiringForm() {
   const [data, setData] = useState({ company: '', contact: '', email: '', phone: '', role: '', experience: '', skills: '', urgency: '', notes: '' })
+  const [fileInfo, setFileInfo] = useState<{ name: string; mime: string; data: string } | null>(null)
   const [ok, setOk] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [err, setErr] = useState('')
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0]
+    if (!selectedFile) return
+
+    // Check size limit (max 10MB)
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      setErr('File size must be under 10MB')
+      return
+    }
+
+    setErr('')
+    const reader = new FileReader()
+    reader.onload = () => {
+      const base64 = reader.result as string
+      setFileInfo({
+        name: selectedFile.name,
+        mime: selectedFile.type,
+        data: base64
+      })
+    }
+    reader.readAsDataURL(selectedFile)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setErr('');
+
+    const payload = {
+      ...data,
+      fileName: fileInfo?.name || '',
+      fileMime: fileInfo?.mime || '',
+      fileData: fileInfo?.data || ''
+    }
     
     try {
       const response = await fetch('/api/hiring', {
@@ -34,7 +65,7 @@ export default function HiringForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(payload)
       });
       
       if (response.ok) {
@@ -44,8 +75,8 @@ export default function HiringForm() {
         setErr(body.error || 'Failed to submit requirement');
       }
     } catch (error: any) {
-      console.error("Submission to MongoDB failed, trying fallback:", error);
-      const submitUrl = import.meta.env.VITE_FORMSPREE_URL || import.meta.env.VITE_GOOGLE_SHEET_URL || "";
+      console.error("Submission error, trying fallback:", error);
+      const submitUrl = import.meta.env.VITE_GOOGLE_SHEET_URL || import.meta.env.VITE_FORMSPREE_URL || "";
       
       if (submitUrl) {
         try {
@@ -59,7 +90,7 @@ export default function HiringForm() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              ...data,
+              ...payload,
               timestamp: new Date().toISOString()
             })
           });
@@ -73,7 +104,6 @@ export default function HiringForm() {
               setErr("Submission failed: " + (errData.error || "Please check configuration."));
             }
           } else {
-            // Google Sheets fallback success (no-cors ignores status)
             setOk(true);
           }
         } catch (fbError: any) {
@@ -153,10 +183,43 @@ export default function HiringForm() {
             </select>
           </Field>
 
-          {/* Upload hint */}
-          <div style={{ padding: '11px 14px', borderRadius: '10px', background: '#F8FAFC', border: '1.5px dashed #CBD5E1', display: 'flex', alignItems: 'center', gap: '9px', cursor: 'pointer' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/><polyline points="17 8 12 3 7 8" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><line x1="12" y1="3" x2="12" y2="15" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/></svg>
-            <span style={{ fontSize: '13px', color: '#94A3B8' }}>Attach Job Description (PDF or DOCX — optional)</span>
+          {/* Interactive File Upload Area */}
+          <div>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#374151', marginBottom: '5px' }}>
+              Job Description Document (PDF or DOCX — Optional)
+            </label>
+            <label style={{
+              padding: '12px 14px', borderRadius: '10px',
+              background: fileInfo ? '#EFF6FF' : '#F8FAFC',
+              border: fileInfo ? '1.5px solid #60A5FA' : '1.5px dashed #CBD5E1',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              gap: '9px', cursor: 'pointer', transition: 'all .2s'
+            }}>
+              <input
+                type="file"
+                accept=".pdf,.docx,.doc"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '9px', overflow: 'hidden' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke={fileInfo ? '#2563EB' : '#94A3B8'} strokeWidth="2" strokeLinecap="round"/>
+                  <polyline points="17 8 12 3 7 8" stroke={fileInfo ? '#2563EB' : '#94A3B8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="12" y1="3" x2="12" y2="15" stroke={fileInfo ? '#2563EB' : '#94A3B8'} strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                <span style={{ fontSize: '13px', color: fileInfo ? '#1D4ED8' : '#64748B', fontWeight: fileInfo ? 600 : 400, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {fileInfo ? `📄 ${fileInfo.name}` : 'Click to attach Job Description (PDF or DOCX)'}
+                </span>
+              </div>
+              {fileInfo && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); setFileInfo(null) }}
+                  style={{ background: 'none', border: 'none', color: '#EF4444', fontWeight: 700, fontSize: '14px', cursor: 'pointer', padding: '2px 6px' }}>
+                  ✕
+                </button>
+              )}
+            </label>
           </div>
 
           <Field label="Additional Notes">

@@ -1,119 +1,167 @@
 export default function Footer() {
   const year = new Date().getFullYear()
 
-  const cols = [
-    { title: 'Company',      links: ['About Us','Our Process','Services','Careers','Blog'] },
-    { title: 'For Employers',links: ['Submit Requirement','Screening Method','Hiring Process','Success Stories','Pricing Model'] },
-    { title: 'For Candidates',links: ['Join Talent Network','Current Openings','Interview Prep','Career Resources','Referral Program'] },
-    { title: 'Legal',        links: ['Privacy Policy','Terms of Service','Cookie Policy','GDPR Compliance'] },
+  const quickLinksCol1 = [
+    'Home',
+    'Academy',
+    'Intensive',
+    'Hire with us',
+    'Contact Us',
+    'Blog',
+    'Our Tech',
+    'NxtWave Careers',
+  ]
+
+  const quickLinksCol2 = [
+    'About Us',
+    'Reviews',
+    'Community',
+    '4.0 Champions',
+    "NxtWave'23 Review",
+    'Python Tutorial',
   ]
 
   return (
-    <footer style={{ background: '#0A0F1A', color: '#64748B' }}>
-      <div className="wrap" style={{ padding: '64px 28px 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '40px' }} className="footer-grid">
-          {/* Brand */}
+    <footer style={{ background: '#0A0F1A', color: '#8fa0b5', fontFamily: "'Inter', sans-serif" }}>
+      <div className="wrap" style={{ padding: '56px 28px 40px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1.2fr 2fr 1.2fr',
+            gap: '48px',
+            alignItems: 'start',
+          }}
+          className="footer-grid"
+        >
+          {/* Brand & Reach Us Column */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-              {/* Left side: NXT WAVE */}
-              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1', fontFamily: "'Inter', sans-serif" }}>
-                <span style={{ fontSize: '15px', fontWeight: 900, color: '#0072C6', letterSpacing: '0.3px' }}>NXT</span>
-                <span style={{ fontSize: '11px', fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center' }}>
-                  W
-                  <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-                    A
-                    <span style={{ position: 'absolute', top: '1px', left: '1px', fontSize: '6px', color: '#0072C6', fontWeight: 900 }}>▲</span>
+            {/* Logo */}
+            <div style={{ marginBottom: '28px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1' }}>
+                  <span style={{ fontSize: '18px', fontWeight: 900, color: '#0072C6', letterSpacing: '0.5px' }}>NXT</span>
+                  <span style={{ fontSize: '13px', fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center' }}>
+                    W
+                    <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+                      A
+                      <span style={{ position: 'absolute', top: '1px', left: '1px', fontSize: '7px', color: '#0072C6', fontWeight: 900 }}>▲</span>
+                    </span>
+                    V
+                    <span style={{ background: '#fff', color: '#0A2540', fontSize: '9px', padding: '1px 2px 0px 2.5px', borderRadius: '1.5px', marginLeft: '1px', fontWeight: 900, display: 'inline-flex', alignItems: 'center', height: '11px', lineHeight: '1' }}>E</span>
+                    <span style={{ fontSize: '6px', fontWeight: 900, verticalAlign: 'super', marginLeft: '2px', alignSelf: 'flex-start', color: '#fff' }}>TM</span>
                   </span>
-                  V
-                  <span style={{ background: '#fff', color: '#0A2540', fontSize: '8px', padding: '1px 2px 0px 2.5px', borderRadius: '1.5px', marginLeft: '1px', fontWeight: 900, display: 'inline-flex', alignItems: 'center', height: '10px', lineHeight: '1' }}>E</span>
-                  <span style={{ fontSize: '5px', fontWeight: 900, verticalAlign: 'super', marginLeft: '1px', alignSelf: 'flex-start', marginTop: '1.5px', color: '#fff' }}>TM</span>
-                </span>
-              </div>
-              {/* Right side: HIRE Capsule */}
-              <div style={{
-                background: '#0072C6',
-                color: '#fff',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                fontWeight: 800,
-                fontSize: '12px',
-                letterSpacing: '0.5px',
-                display: 'flex',
-                alignItems: 'center',
-                height: '22px',
-                marginLeft: '4px'
-              }}>
-                HIRE
-              </div>
-            </div>
-            <p style={{ fontSize: '13.5px', lineHeight: 1.72, color: '#475569', maxWidth: '255px', marginBottom: '22px' }}>
-              Premium recruitment platform specializing in lateral hiring. Verified experienced professionals in 24–48 hours.
-            </p>
-
-            {/* Contact */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', marginBottom: '20px' }}>
-              {[
-                { icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.45 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.55a16 16 0 0 0 6.52 6.52l1.61-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="2"/></svg>, text: '+91 98765 43210' },
-                { icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/><polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/></svg>, text: 'hello@nxtwavehire.com' },
-              ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-                  {item.icon}
-                  <span>{item.text}</span>
                 </div>
-              ))}
+              </div>
             </div>
 
-            {/* Social */}
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {[
-                { title: 'LinkedIn', path: 'M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z M4 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4z' },
-                { title: 'Twitter / X', path: 'M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z' },
-              ].map((s, i) => (
-                <a key={i} href="#" title={s.title} style={{
-                  width: '34px', height: '34px', borderRadius: '9px',
-                  background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.08)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#475569', textDecoration: 'none', transition: 'all .2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(37,99,235,.2)'; e.currentTarget.style.color = '#93C5FD'; e.currentTarget.style.borderColor = 'rgba(37,99,235,.35)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,.06)'; e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.08)' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d={s.path}/></svg>
+            {/* Reach Us */}
+            <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#5b7a9c', marginBottom: '18px', letterSpacing: '0.2px' }}>
+              Reach Us
+            </h4>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* WhatsApp */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <div style={{ width: '22px', height: '22px', flexShrink: 0, marginTop: '2px' }}>
+                  <svg viewBox="0 0 24 24" width="22" height="22">
+                    <path fill="#25D366" d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.762.459 3.48 1.332 5.001L2 22l5.143-1.348a9.97 9.97 0 0 0 4.867 1.258h.004c5.506 0 9.988-4.478 9.989-9.985 0-2.668-1.039-5.176-2.926-7.062A9.92 9.92 0 0 0 12.012 2z"/>
+                    <path fill="#FFF" d="M8.536 7.376c-.235-.522-.482-.533-.705-.542-.183-.008-.392-.008-.601-.008s-.549.078-.836.392c-.287.314-1.097 1.072-1.097 2.616 0 1.543 1.123 3.033 1.28 3.242.157.21 2.21 3.374 5.355 4.733.748.324 1.332.518 1.787.662.751.239 1.434.205 1.975.124.603-.09 1.854-.757 2.115-1.488.261-.732.261-1.36.183-1.488-.078-.13-.287-.209-.597-.365s-1.854-.915-2.141-1.02-.496-.157-.705.157c-.209.314-.81 1.02-.992 1.23-.183.209-.366.235-.679.078-.314-.157-1.325-.488-2.524-1.558-.934-.832-1.564-1.859-1.747-2.173-.183-.314-.02-.484.137-.64.141-.141.314-.366.47-.549.157-.183.209-.314.314-.523.105-.209.052-.392-.026-.549-.078-.157-.705-1.701-.966-2.326z"/>
+                  </svg>
+                </div>
+                <div>
+                  <a href="https://wa.me/919390111761" target="_blank" rel="noreferrer" style={{ color: '#8fa0b5', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                    +919390111761
+                  </a>
+                  <div style={{ fontSize: '12px', color: '#5b7a9c', marginTop: '2px' }}>(WhatsApp only)</div>
+                </div>
+              </div>
+
+              {/* Email */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '22px', height: '22px', borderRadius: '4px', background: '#0072C6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                  </svg>
+                </div>
+                <a href="mailto:support@nxtwave.tech" style={{ color: '#8fa0b5', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                  support@nxtwave.tech
                 </a>
-              ))}
+              </div>
+
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/school/nxtwavetech/posts/?feedView=all"
+                target="_blank"
+                rel="noreferrer"
+                style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}
+              >
+                <div style={{ width: '22px', height: '22px', borderRadius: '4px', background: '#0A66C2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                  </svg>
+                </div>
+                <span style={{ color: '#8fa0b5', fontSize: '14px', fontWeight: 500, transition: 'color .18s' }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                  LinkedIn
+                </span>
+              </a>
             </div>
           </div>
 
-          {/* Nav cols */}
-          {cols.map((col, i) => (
-            <div key={i}>
-              <h4 style={{ fontSize: '12px', fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
-                {col.title}
-              </h4>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px' }}>
-                {col.links.map((link, j) => (
-                  <li key={j}>
-                    <a href="#" style={{ fontSize: '13.5px', color: '#475569', textDecoration: 'none', transition: 'color .18s' }}
-                      onMouseEnter={e => { (e.target as HTMLAnchorElement).style.color = '#CBD5E1' }}
-                      onMouseLeave={e => { (e.target as HTMLAnchorElement).style.color = '#475569' }}>
-                      {link}
+          {/* Quick Links Column */}
+          <div>
+            <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#5b7a9c', marginBottom: '24px', letterSpacing: '0.2px' }}>
+              Quick Links
+            </h4>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 24px' }}>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {quickLinksCol1.map((item, i) => (
+                  <li key={i}>
+                    <a href="#" style={{ fontSize: '14px', color: '#8fa0b5', textDecoration: 'none', transition: 'color .18s', fontWeight: 400 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {quickLinksCol2.map((item, i) => (
+                  <li key={i}>
+                    <a href="#" style={{ fontSize: '14px', color: '#8fa0b5', textDecoration: 'none', transition: 'color .18s', fontWeight: 400 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                      {item}
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
-          ))}
+          </div>
+
+          {/* Address / Location Column */}
+          <div>
+            <a
+              href="https://www.google.com/maps/place/Sohini+Tech+Park/@17.4226565,78.3461039,17z/data=!4m6!3m5!1s0x3bcb93793ddd7d43:0xa8e39713da01f08d!8m2!3d17.4227794!4d78.3471875!16s%2Fg%2F11ghtqqdpj?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noreferrer"
+              style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginTop: '40px', textDecoration: 'none' }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b7a9c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#8fa0b5', margin: 0, fontWeight: 400, transition: 'color .18s' }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                8th Floor, Sohini Tech Park, Nanakramguda Rd, Financial District, Gachibowli, Nanakramguda, Telangana 500032
+              </p>
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Bottom */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,.05)' }}>
-        <div className="wrap" style={{ padding: '18px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-          <span style={{ fontSize: '13px' }}>© {year} NXT Wave Hire. All rights reserved.</span>
-          <div style={{ display: 'flex', gap: '22px' }}>
-            {['Privacy Policy', 'Terms', 'Cookies'].map((t, i) => (
-              <a key={i} href="#" style={{ fontSize: '13px', color: '#475569', textDecoration: 'none', transition: 'color .18s' }}
-                onMouseEnter={e => { (e.target as HTMLAnchorElement).style.color = '#94A3B8' }}
-                onMouseLeave={e => { (e.target as HTMLAnchorElement).style.color = '#475569' }}>
+      {/* Bottom bar */}
+      <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', background: 'rgba(0,0,0,.15)' }}>
+        <div className="wrap" style={{ padding: '16px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <span style={{ fontSize: '13px', color: '#5b7a9c' }}>© {year} NxtWave. All rights reserved.</span>
+          <div style={{ display: 'flex', gap: '20px' }}>
+            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((t, i) => (
+              <a key={i} href="#" style={{ fontSize: '13px', color: '#5b7a9c', textDecoration: 'none', transition: 'color .18s' }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#5b7a9c'}>
                 {t}
               </a>
             ))}
@@ -122,8 +170,12 @@ export default function Footer() {
       </div>
 
       <style>{`
-        @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr 1fr !important; } }
-        @media (max-width: 640px)  { .footer-grid { grid-template-columns: 1fr 1fr !important; } }
+        @media (max-width: 900px) {
+          .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 36px !important; }
+        }
+        @media (max-width: 600px) {
+          .footer-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
+        }
       `}</style>
     </footer>
   )

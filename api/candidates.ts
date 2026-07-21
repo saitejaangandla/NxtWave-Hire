@@ -1,22 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { MongoClient } from 'mongodb'
-import dns from 'node:dns'
-
-let client: MongoClient | null = null
-let dbPromise: Promise<any> | null = null
-
-async function getDb(uri: string) {
-  if (!client) {
-    try {
-      dns.setServers(['8.8.8.8', '1.1.1.1'])
-    } catch (dnsErr) {
-      console.warn('Failed to set custom DNS servers:', dnsErr)
-    }
-    client = new MongoClient(uri)
-    dbPromise = client.connect().then(() => client.db())
-  }
-  return dbPromise
-}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS Headers
@@ -39,20 +21,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const uri = process.env.MONGODB_URI
-    if (!uri) {
-      res.status(500).json({ error: 'MONGODB_URI env variable not configured' })
+    const sheetsUrl = process.env.GOOGLE_SHEETS_URL || process.env.VITE_GOOGLE_SHEET_URL
+    if (!sheetsUrl) {
+      res.status(500).json({ error: 'GOOGLE_SHEETS_URL environment variable is not configured' })
       return
     }
 
-    const db = await getDb(uri)
-    const candidates = db.collection('candidates')
-    const result = await candidates.insertOne({
+    const payload = {
       ...req.body,
-      createdAt: new Date()
+      formType: 'candidate',
+      createdAt: new Date().toISOString()
+    }
+
+    const sheetsRes = await fetch(sheetsUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     })
-    res.status(201).json({ success: true, id: result.insertedId })
+
+    if (sheetsRes.ok) {
+      res.status(201).json({ success: true, message: 'Saved to Google Sheets' })
+    } else {
+      res.status(500).json({ error: 'Google Sheets endpoint returned an error' })
+    }
   } catch (err: any) {
     res.status(500).json({ error: 'Server error', details: err.message })
   }
 }
+
