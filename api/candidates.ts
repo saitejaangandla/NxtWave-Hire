@@ -21,11 +21,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const sheetsUrl = process.env.GOOGLE_SHEETS_URL || process.env.VITE_GOOGLE_SHEET_URL
-    if (!sheetsUrl) {
-      res.status(500).json({ error: 'GOOGLE_SHEETS_URL environment variable is not configured' })
-      return
-    }
+    const sheetsUrl =
+      process.env.GOOGLE_SHEETS_URL ||
+      process.env.VITE_GOOGLE_SHEET_URL ||
+      'https://script.google.com/macros/s/AKfycbxO34DMu8l37-KoQ_q_1Qe2srg_UjxdzsFzhdTiXxaypRRqA2PhS2vfAAEovWG-fNyU/exec'
 
     const payload = {
       ...req.body,
