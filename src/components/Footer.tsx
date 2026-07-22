@@ -1,33 +1,13 @@
 export default function Footer() {
   const year = new Date().getFullYear()
 
-  const quickLinksCol1 = [
-    'Home',
-    'Academy',
-    'Intensive',
-    'Hire with us',
-    'Contact Us',
-    'Blog',
-    'Our Tech',
-    'NxtWave Careers',
-  ]
-
-  const quickLinksCol2 = [
-    'About Us',
-    'Reviews',
-    'Community',
-    '4.0 Champions',
-    "NxtWave'23 Review",
-    'Python Tutorial',
-  ]
-
   return (
     <footer style={{ background: '#0A0F1A', color: '#8fa0b5', fontFamily: "'Inter', sans-serif" }}>
       <div className="wrap" style={{ padding: '56px 28px 40px' }}>
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '1.2fr 2fr 1.2fr',
+            gridTemplateColumns: '1.5fr 1.5fr',
             gap: '48px',
             alignItems: 'start',
           }}
@@ -108,40 +88,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links Column */}
-          <div>
-            <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#5b7a9c', marginBottom: '24px', letterSpacing: '0.2px' }}>
-              Quick Links
-            </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 24px' }}>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {quickLinksCol1.map((item, i) => (
-                  <li key={i}>
-                    <a href="#" style={{ fontSize: '14px', color: '#8fa0b5', textDecoration: 'none', transition: 'color .18s', fontWeight: 400 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {quickLinksCol2.map((item, i) => (
-                  <li key={i}>
-                    <a href="#" style={{ fontSize: '14px', color: '#8fa0b5', textDecoration: 'none', transition: 'color .18s', fontWeight: 400 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
           {/* Address / Location Column */}
           <div>
             <a
               href="https://www.google.com/maps/place/Sohini+Tech+Park/@17.4226565,78.3461039,17z/data=!4m6!3m5!1s0x3bcb93793ddd7d43:0xa8e39713da01f08d!8m2!3d17.4227794!4d78.3471875!16s%2Fg%2F11ghtqqdpj?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D"
               target="_blank"
               rel="noreferrer"
-              style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginTop: '40px', textDecoration: 'none' }}
+              style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginTop: '46px', textDecoration: 'none' }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5b7a9c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
