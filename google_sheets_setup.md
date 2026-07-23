@@ -8,34 +8,46 @@ Copy and paste the following code into your Google Apps Script editor:
 
 ```javascript
 function doPost(e) {
+  var targetEmail = "amrutha.g@nxtwave.tech, saitejaanagandla56@gmail.com"; // Set your target email address here
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Sheet1") || ss.getActiveSheet(); 
+  var logSheet = ss.getSheetByName("Logs");
+  var timestamp = new Date();
+
   try {
     var data = JSON.parse(e.postData.contents);
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
+
     // 1. Process File Upload (if provided)
     var fileUrl = "";
     if (data.fileData && data.fileName) {
-      // Find or create "Hiring Attachments" folder in Google Drive
       var folderName = "Hiring Attachments";
       var folder;
       var folders = DriveApp.getFoldersByName(folderName);
+      
       if (folders.hasNext()) {
         folder = folders.next();
       } else {
         folder = DriveApp.createFolder(folderName);
       }
-      
-      // Decode the raw base64 string
-      var fileBytes = Utilities.base64Decode(data.fileData);
+
+      // Clean base64 string if data URL scheme is passed (e.g. "data:application/pdf;base64,...")
+      var cleanBase64 = data.fileData;
+      if (cleanBase64.indexOf("base64,") !== -1) {
+        cleanBase64 = cleanBase64.split("base64,")[1];
+      }
+
+      // Decode base64 and create blob
+      var fileBytes = Utilities.base64Decode(cleanBase64);
       var blob = Utilities.newBlob(fileBytes, data.fileMime || 'application/octet-stream', data.fileName);
       var file = folder.createFile(blob);
-      
-      // Allow anyone with the link to view the file
+
+      // Set access to Anyone with link
       file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
       fileUrl = file.getUrl();
     }
-    
-    // 2. Initialize sheet headers if empty
+
+    // 2. Initialize sheet headers if completely empty
     if (sheet.getLastColumn() === 0) {
       sheet.appendRow([
         "Timestamp",
@@ -52,84 +64,103 @@ function doPost(e) {
         "Additional Notes"
       ]);
     }
-    
-    // Get headers from first row
+
+    // 3. Map values based on Column Headers
     var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     var newRow = [];
-    
-    // Map keys to headers dynamically (case-insensitive)
+
+    // Map keys to headers dynamically using flexible substring matching
     for (var i = 0; i < headers.length; i++) {
       var header = headers[i].toString().trim().toLowerCase();
       var cellValue = "";
-      
-      switch (header) {
-        case "timestamp":
-        case "date":
-        case "created at":
-          cellValue = data.createdAt || new Date().toISOString();
-          break;
-        case "form type":
-          cellValue = data.formType || "hiring";
-          break;
-        case "company name":
-        case "company":
-          cellValue = data.company || "";
-          break;
-        case "contact person":
-        case "contact":
-          cellValue = data.contact || "";
-          break;
-        case "work email":
-        case "email":
-          cellValue = data.email || "";
-          break;
-        case "phone":
-        case "mobile":
-        case "tel":
-          cellValue = data.phone || "";
-          break;
-        case "role title":
-        case "role":
-          cellValue = data.role || "";
-          break;
-        case "experience required":
-        case "experience":
-          cellValue = data.experience || "";
-          break;
-        case "required skills":
-        case "skills":
-          cellValue = data.skills || "";
-          break;
-        case "hiring urgency":
-        case "urgency":
-          cellValue = data.urgency || "";
-          break;
-        case "attachment link":
-        case "attachment":
-        case "file url":
-        case "resume":
-        case "job description":
-        case "jd":
-          cellValue = fileUrl;
-          break;
-        case "additional notes":
-        case "notes":
-          cellValue = data.notes || "";
-          break;
-        default:
-          // Check for any other fields sent by the client that might match the header
-          cellValue = data[headers[i]] || data[header] || "";
+
+      if (header.indexOf("timestamp") !== -1 || header.indexOf("date") !== -1 || header.indexOf("time") !== -1) {
+        cellValue = data.createdAt || timestamp.toISOString();
+      } else if (header.indexOf("form type") !== -1) {
+        cellValue = data.formType || "hiring";
+      } else if (header.indexOf("company") !== -1) {
+        cellValue = data.company || "";
+      } else if (header.indexOf("contact") !== -1 || header.indexOf("person") !== -1 || header.indexOf("name") !== -1) {
+        // Ensure "contact" or "name" matches contact person, not company name
+        cellValue = data.contact || "";
+      } else if (header.indexOf("email") !== -1 || header.indexOf("mail") !== -1) {
+        cellValue = data.email || "";
+      } else if (header.indexOf("phone") !== -1 || header.indexOf("mobile") !== -1 || header.indexOf("tel") !== -1) {
+        cellValue = data.phone || "";
+      } else if (header.indexOf("role") !== -1 || header.indexOf("title") !== -1 || header.indexOf("position") !== -1) {
+        cellValue = data.role || "";
+      } else if (header.indexOf("experience") !== -1 || header.indexOf("exp") !== -1) {
+        cellValue = data.experience || "";
+      } else if (header.indexOf("skill") !== -1) {
+        cellValue = data.skills || "";
+      } else if (header.indexOf("urgency") !== -1 || header.indexOf("urgent") !== -1) {
+        cellValue = data.urgency || "";
+      } else if (header.indexOf("attachment") !== -1 || header.indexOf("file") !== -1 || header.indexOf("link") !== -1 || header.indexOf("jd") !== -1 || header.indexOf("resume") !== -1 || header.indexOf("job description") !== -1) {
+        cellValue = fileUrl;
+      } else if (header.indexOf("note") !== -1 || header.indexOf("additional") !== -1 || header.indexOf("comment") !== -1) {
+        cellValue = data.notes || "";
+      } else {
+        // Fallback to exact key match
+        cellValue = data[headers[i]] || data[headers[i].toString().trim()] || data[header] || "";
       }
       newRow.push(cellValue);
     }
-    
-    sheet.appendRow(newRow);
-    
-    return ContentService.createTextOutput(JSON.stringify({ "result": "success", "fileUrl": fileUrl }))
+
+    // 4. Find first truly empty row to bypass formatted gridline rows
+    var rowNum = 1;
+    var values = sheet.getDataRange().getValues();
+    var foundEmptyRow = false;
+    for (var r = 0; r < values.length; r++) {
+      var hasContent = false;
+      for (var c = 0; c < Math.min(values[r].length, 5); c++) {
+        if (values[r][c].toString().trim() !== "") {
+          hasContent = true;
+          break;
+        }
+      }
+      if (!hasContent) {
+        rowNum = r + 1;
+        foundEmptyRow = true;
+        break;
+      }
+    }
+    if (!foundEmptyRow) {
+      rowNum = values.length + 1;
+    }
+
+    // Write Data to Spreadsheet
+    sheet.getRange(rowNum, 1, 1, newRow.length).setValues([newRow]);
+
+    // 5. Send Notification Email
+    GmailApp.sendEmail(
+      targetEmail,
+      "New Form Submission: " + (data.company || "Hire Form"),
+      "You received a new submission:\n\n" +
+      "Company: " + (data.company || "") + "\n" +
+      "Contact Person: " + (data.contact || "") + "\n" +
+      "Email: " + (data.email || "") + "\n" +
+      "Phone: " + (data.phone || "") + "\n" +
+      "Role: " + (data.role || "") + "\n" +
+      "Experience: " + (data.experience || "") + "\n" +
+      "Skills: " + (data.skills || "") + "\n" +
+      "Urgency: " + (data.urgency || "") + "\n" +
+      "Attachment Link: " + (fileUrl || "No attachment provided") + "\n" +
+      "Notes: " + (data.notes || "")
+    );
+
+    // 6. Log success if log sheet exists
+    if (logSheet) {
+      logSheet.appendRow([timestamp, "SUCCESS", "Submission processed & email sent to " + targetEmail, fileUrl]);
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({ result: "success", fileUrl: fileUrl }))
       .setMimeType(ContentService.MimeType.JSON);
-      
+
   } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": error.toString() }))
+    if (logSheet) {
+      logSheet.appendRow([timestamp, "ERROR", error.toString(), error.stack || ""]);
+    }
+    return ContentService.createTextOutput(JSON.stringify({ result: "error", error: error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
