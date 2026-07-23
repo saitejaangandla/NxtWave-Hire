@@ -164,6 +164,12 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
+
+// Dummy function to easily trigger Google Drive & Gmail authorization
+function triggerAuthorization() {
+  DriveApp.getRootFolder();
+  GmailApp.sendEmail(Session.getActiveUser().getEmail(), "Auth Test", "Authorization test successful.");
+}
 ```
 
 ## Setup Instructions
@@ -172,16 +178,22 @@ function doPost(e) {
 2. **Open Apps Script**: Go to the top menu and select **Extensions** > **Apps Script**.
 3. **Paste the Code**: Delete any default code inside the editor and paste the `Code.gs` content from above.
 4. **Save**: Click the **Save** (disk) icon in the toolbar.
-5. **Deploy**:
+5. **Grant Drive & Gmail Permissions (CRITICAL)**:
+   - In the toolbar at the top of the editor, find the dropdown menu next to "Run" and "Debug".
+   - Select **`triggerAuthorization`** from that dropdown menu.
+   - Click the **Run** button (the play button icon).
+   - An **Authorization Required** popup will appear. Click **Review permissions**.
+   - Select your Google account.
+   - Click **Advanced** at the bottom, and then click **Go to Untitled project (unsafe)** (or your project's name).
+   - Click **Allow**.
+6. **Deploy as Web App**:
    - Click the **Deploy** button at the top right and select **New deployment**.
    - Under *Select type*, click the gear icon and select **Web app**.
    - Configure the deployment settings:
-     - **Description**: Enter a name (e.g., `Hiring Form Web App`).
+     - **Description**: Enter a name (e.g., `Hiring Form Web App v2`).
      - **Execute as**: Select **Me** (your-email@gmail.com).
      - **Who has access**: Select **Anyone**.
    - Click **Deploy**.
-6. **Authorize Permissions**:
-   - Apps Script will prompt you to authorize permissions. Click **Authorize access**, log in with your Google account, click **Advanced** -> **Go to Untitled project (unsafe)** (or your project's name), and click **Allow**.
 7. **Copy Web App URL**: Copy the **Web URL** provided at the end of the deployment wizard (it will end in `/exec`).
 8. **Update `.env`**:
    - Open your project's `.env` file in the root directory.
