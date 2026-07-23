@@ -105,7 +105,7 @@ function Typewriter() {
 }
 
 /* ── Hero ────────────────────────────────────────────────────── */
-export default function Hero() {
+export default function Hero({ onOpenContact }: { onOpenContact: () => void }) {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -338,8 +338,8 @@ export default function Hero() {
                   />
                 </svg>
               </a>
-              <a
-                href="#contact"
+              <button
+                onClick={onOpenContact}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -353,7 +353,9 @@ export default function Hero() {
                   textDecoration: "none",
                   border: "1.5px solid #E2E8F0",
                   boxShadow: "0 2px 8px rgba(15,23,42,.05)",
+                  cursor: "pointer",
                   transition: "all .25s",
+                  fontFamily: "inherit",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "#93C5FD";
@@ -380,7 +382,7 @@ export default function Hero() {
                   />
                 </svg>
                 Talk to Recruitment Expert
-              </a>
+              </button>
             </div>
 
             {/* Trust strip */}

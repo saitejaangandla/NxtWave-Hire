@@ -38,10 +38,11 @@ export default function HiringForm() {
     const reader = new FileReader()
     reader.onload = () => {
       const base64 = reader.result as string
+      const cleanBase64 = base64.split(',')[1] || base64
       setFileInfo({
         name: selectedFile.name,
         mime: selectedFile.type,
-        data: base64
+        data: cleanBase64
       })
     }
     reader.readAsDataURL(selectedFile)

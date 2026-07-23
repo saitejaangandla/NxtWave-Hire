@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function Navbar() {
+export default function Navbar({ onOpenContact }: { onOpenContact: () => void }) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -11,12 +11,12 @@ export default function Navbar() {
   }, [])
 
   const nav = [
-    { label: 'Why Us',        href: '#why' },
-    { label: 'Screening',     href: '#screening' },
-    { label: 'Process',       href: '#process' },
-    { label: 'Testimonials',  href: '#testimonials' },
-    { label: 'Results',       href: '#metrics' },
-    { label: 'Contact',       href: '#contact' },
+    { label: 'Why Us', href: '#why' },
+    { label: 'Screening', href: '#screening' },
+    { label: 'Process', href: '#process' },
+    { label: 'Testimonials', href: '#testimonials' },
+    { label: 'Results', href: '#metrics' },
+    { label: 'Contact', href: '#contact' },
   ]
 
   return (
@@ -73,8 +73,8 @@ export default function Navbar() {
               fontSize: '14px', fontWeight: 500, color: '#475569',
               textDecoration: 'none', transition: 'all .18s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.color = '#0F172A' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#475569' }}>
+              onMouseEnter={e => { e.currentTarget.style.background = '#F1F5F9'; e.currentTarget.style.color = '#0F172A' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#475569' }}>
               {n.label}
             </a>
           ))}
@@ -82,16 +82,19 @@ export default function Navbar() {
 
         {/* CTAs */}
         <div className="desk-nav" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <a href="#contact" style={{
-            padding: '8px 17px', borderRadius: '9px',
-            fontSize: '13.5px', fontWeight: 600, color: '#2563EB',
-            textDecoration: 'none', border: '1.5px solid #BFDBFE',
-            transition: 'all .2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#EFF6FF'; e.currentTarget.style.borderColor = '#93C5FD' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = '#BFDBFE' }}>
+          <button
+            onClick={onOpenContact}
+            style={{
+              padding: '8px 17px', borderRadius: '9px',
+              fontSize: '13.5px', fontWeight: 600, color: '#2563EB',
+              textDecoration: 'none', border: '1.5px solid #BFDBFE',
+              background: 'transparent', cursor: 'pointer',
+              transition: 'all .2s', fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#EFF6FF'; e.currentTarget.style.borderColor = '#93C5FD' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = '#BFDBFE' }}>
             Talk to Expert
-          </a>
+          </button>
           <a href="#contact" style={{
             padding: '8px 18px', borderRadius: '9px',
             fontSize: '13.5px', fontWeight: 700, color: '#fff',
@@ -100,8 +103,8 @@ export default function Navbar() {
             boxShadow: '0 2px 10px rgba(37,99,235,.32)',
             transition: 'all .2s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 5px 18px rgba(37,99,235,.42)' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(37,99,235,.32)' }}>
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 5px 18px rgba(37,99,235,.42)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(37,99,235,.32)' }}>
             Submit Requirement
           </a>
         </div>
@@ -110,8 +113,8 @@ export default function Navbar() {
         <button className="mob-toggle" onClick={() => setMobileOpen(!mobileOpen)}
           style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '6px', color: '#0F172A' }}>
           {mobileOpen
-            ? <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg>
-            : <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg>}
+            ? <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg>
+            : <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg>}
         </button>
       </div>
 

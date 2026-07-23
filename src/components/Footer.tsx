@@ -44,13 +44,13 @@ export default function Footer() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <div style={{ width: '22px', height: '22px', flexShrink: 0, marginTop: '2px' }}>
                   <svg viewBox="0 0 24 24" width="22" height="22">
-                    <path fill="#25D366" d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.762.459 3.48 1.332 5.001L2 22l5.143-1.348a9.97 9.97 0 0 0 4.867 1.258h.004c5.506 0 9.988-4.478 9.989-9.985 0-2.668-1.039-5.176-2.926-7.062A9.92 9.92 0 0 0 12.012 2z"/>
-                    <path fill="#FFF" d="M8.536 7.376c-.235-.522-.482-.533-.705-.542-.183-.008-.392-.008-.601-.008s-.549.078-.836.392c-.287.314-1.097 1.072-1.097 2.616 0 1.543 1.123 3.033 1.28 3.242.157.21 2.21 3.374 5.355 4.733.748.324 1.332.518 1.787.662.751.239 1.434.205 1.975.124.603-.09 1.854-.757 2.115-1.488.261-.732.261-1.36.183-1.488-.078-.13-.287-.209-.597-.365s-1.854-.915-2.141-1.02-.496-.157-.705.157c-.209.314-.81 1.02-.992 1.23-.183.209-.366.235-.679.078-.314-.157-1.325-.488-2.524-1.558-.934-.832-1.564-1.859-1.747-2.173-.183-.314-.02-.484.137-.64.141-.141.314-.366.47-.549.157-.183.209-.314.314-.523.105-.209.052-.392-.026-.549-.078-.157-.705-1.701-.966-2.326z"/>
+                    <path fill="#25D366" d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.762.459 3.48 1.332 5.001L2 22l5.143-1.348a9.97 9.97 0 0 0 4.867 1.258h.004c5.506 0 9.988-4.478 9.989-9.985 0-2.668-1.039-5.176-2.926-7.062A9.92 9.92 0 0 0 12.012 2z" />
+                    <path fill="#FFF" d="M8.536 7.376c-.235-.522-.482-.533-.705-.542-.183-.008-.392-.008-.601-.008s-.549.078-.836.392c-.287.314-1.097 1.072-1.097 2.616 0 1.543 1.123 3.033 1.28 3.242.157.21 2.21 3.374 5.355 4.733.748.324 1.332.518 1.787.662.751.239 1.434.205 1.975.124.603-.09 1.854-.757 2.115-1.488.261-.732.261-1.36.183-1.488-.078-.13-.287-.209-.597-.365s-1.854-.915-2.141-1.02-.496-.157-.705.157c-.209.314-.81 1.02-.992 1.23-.183.209-.366.235-.679.078-.314-.157-1.325-.488-2.524-1.558-.934-.832-1.564-1.859-1.747-2.173-.183-.314-.02-.484.137-.64.141-.141.314-.366.47-.549.157-.183.209-.314.314-.523.105-.209.052-.392-.026-.549-.078-.157-.705-1.701-.966-2.326z" />
                   </svg>
                 </div>
                 <div>
-                  <a href="https://wa.me/919390111761" target="_blank" rel="noreferrer" style={{ color: '#8fa0b5', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
-                    +919390111761
+                  <a href="https://wa.me/918639195926" target="_blank" rel="noreferrer" style={{ color: '#8fa0b5', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                    +91 86391 95926
                   </a>
                   <div style={{ fontSize: '12px', color: '#5b7a9c', marginTop: '2px' }}>(WhatsApp only)</div>
                 </div>
@@ -60,12 +60,12 @@ export default function Footer() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '22px', height: '22px', borderRadius: '4px', background: '#0072C6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="4" width="20" height="16" rx="2"/>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                   </svg>
                 </div>
-                <a href="mailto:support@nxtwave.tech" style={{ color: '#8fa0b5', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
-                  support@nxtwave.tech
+                <a href="mailto:amrutha.g@nxtwave.tech" style={{ color: '#8fa0b5', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>
+                  amrutha.g@nxtwave.tech
                 </a>
               </div>
 
@@ -78,7 +78,7 @@ export default function Footer() {
               >
                 <div style={{ width: '22px', height: '22px', borderRadius: '4px', background: '#0A66C2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff">
-                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
                   </svg>
                 </div>
                 <span style={{ color: '#8fa0b5', fontSize: '14px', fontWeight: 500, transition: 'color .18s' }} onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = '#8fa0b5'}>

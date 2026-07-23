@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import TrustBar from './components/TrustBar'
@@ -9,13 +10,16 @@ import Comparison from './components/Comparison'
 import Testimonials from './components/Testimonials'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
+import ContactModal from './components/ContactModal'
 
 export default function App() {
+  const [modalOpen, setModalOpen] = useState(false)
+
   return (
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
-      <Navbar />
+      <Navbar onOpenContact={() => setModalOpen(true)} />
       <main>
-        <Hero />
+        <Hero onOpenContact={() => setModalOpen(true)} />
         <TrustBar />
         <WhyChooseUs />
         <ScreeningProcess />
@@ -28,6 +32,7 @@ export default function App() {
         <FinalCTA />
       </main>
       <Footer />
+      <ContactModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
   )
 }
